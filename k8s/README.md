@@ -44,3 +44,4 @@ echo -n '<string>' | base64
 
 # Reference
 - [minikube start](https://minikube.sigs.k8s.io/docs/start/)
+- [Nana tech world - github](https://gitlab.com/nanuchi/youtube-tutorial-series/-/tree/master)

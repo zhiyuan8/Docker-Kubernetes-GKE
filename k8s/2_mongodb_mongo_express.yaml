@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: 2_mongodb_mongo_express
+  name: my-2-mongodb-mongo-express  # Updated name to comply with naming rules
   labels:
     app: mongo
 spec:
@@ -23,10 +23,22 @@ spec:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
             secretKeyRef:
-              name: 2_mongodb_mongo_express_secret
+              name: my-2-mongodb-mongo-express-secret  # Ensure this matches your updated secret name
               key: username
         - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: 2_mongodb_mongo_express_secret
+              name: my-2-mongodb-mongo-express-secret  # Ensure this matches your updated secret name
               key: password
+---
+apiVersion: v1
+kind : Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
