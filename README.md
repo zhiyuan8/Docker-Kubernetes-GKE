@@ -8,15 +8,57 @@ Open-source container orchestration platform, help to mange cotainers at scale.
 - trend from monolithic to microservices architecture.
 
 ## K8s Components
-- `pod`: This is the basic unit in the k8s.
+### contrainer abtraction
+- `pod`: This is the basic unit in the k8s, usually 1 application per pod.
+    - earch pod has its own IP address, use internal IP address
+    - new IP address when pod restarts
 - `service`: Service is used to expose the pod to the outside world. In service, one typical type is load balancer.
-- `Ingress`: Ingress is used to expose the service to the outside world.
-- `deployment`: Deployment is used to manage the pod. It is used to create, update, and delete the pod.
-- `Volume`: Volume is used to store the data. It is used to make the data persistent.
-- `StatefulSet`: StatefulSet is used to manage the stateful application.
-- `Secret`: Secret is used to store the sensitive information like password, token, etc.
-- `ConfigMap`: ConfigMap is used to store the configuration information.
+    - persistent IP address
+    - lifecycle of pod and service are independent
+    - load balancer : distribute the traffic to the pods
+- `Volumes`: For **data storage**. It is used to make the data persistent.
+    - attach physical storage to the pod, or remote storage
+    - k8s does **NOT** persist data by default
 
+### route traffic in cluster
+- `Ingress`: Manages external access to the services in a cluster, providing HTTP and HTTPS routing.
+- `k8s cluster`: A k8s cluster is a set of nodes that run containerized applications. 
+    - `master node`: The master node is responsible for managing the cluster.
+    - `worker node`: The worker node is responsible for running the application.
+
+### external configuration
+- `ConfigMap`: ConfigMap is used to store the configuration information.
+    - store external configuration of your application
+    - don't put sensitive information, put them in `Secret`
+- `Secret`: Secret is used to store the sensitive information like password, token, etc. in base64 encoded format.
+
+
+### Replicating mechanism
+- `deployment`: create, update, and delete the pod.
+    - user creates the deployment, and deployment creates the pod
+    - `deployment` is used to manage the **stateless** application
+- `StatefulSet`: StatefulSet is used to manage the stateful application and avoid data inconsistency, such as `database`.
+    - `StatefulSet` is used to manage the **stateful** application
+    - host DB outside of the k8s cluster because it is diffucult to manage the stateful application in k8s cluster.
+
+## K8s Architecture
+3 process : 1. Kube proxy, 2. Kubelet, 3. Kube API server
+usually 2 master nodes for high availability, and 3 worker nodes for high performance.
+
+master process :
+client request -> Kube API server ->  Kube scheduler -> Kube controller manager -> etcd (key-value store), cluster brain
+
+worker process :
+
+Add new master / node server
+1. get new bare server
+2. install all the master / worker node processes
+3. join the new server to the cluster
+
+## minikube and kubectl
+test / local cluster setup : master and worker node run in one machine
+
+kubectl : command line tool to interact with k8s cluster
 
 # Docker
 - docker image : This is the basic unit in the docker. It is a snapshot of the file system.
@@ -89,8 +131,9 @@ for running multiple containers
 
 # References
 - [Docker Kubernetes Udemy Course](https://www.udemy.com/course/docker-and-kubernetes-the-complete-guide/)
-- [k8s notes](https://kubernetes.io/docs/home/)
-- [Docker](https://docs.docker.com/)
+- [k8s official website](https://kubernetes.io/docs/home/)
+    - [installation](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/)
+- [Docker official website](https://docs.docker.com/)
 - [Alex Chen Notes](https://github.com/alexchen4ai/KubernetesNotes)
 - TechWorldwithNana
     - [Docker](https://www.youtube.com/watch?v=3c-iBn73dDE&ab_channel=TechWorldwithNana)
