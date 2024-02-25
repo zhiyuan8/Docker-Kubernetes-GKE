@@ -1,7 +1,21 @@
 
 # Kubernetes
-- pod: This is the basic unit in the k8s.
-- service: Service is used to expose the pod to the outside world. In service, one typical type is load balancer.
+Open-source container orchestration platform, help to mange cotainers at scale.  
+- `orchestration` : The process of automating the deployment, scaling, and management of containerized applications.
+    - high availability or no downtime
+    - scalability or high performance
+    - disaster recovery
+- trend from monolithic to microservices architecture.
+
+## K8s Components
+- `pod`: This is the basic unit in the k8s.
+- `service`: Service is used to expose the pod to the outside world. In service, one typical type is load balancer.
+- `Ingress`: Ingress is used to expose the service to the outside world.
+- `deployment`: Deployment is used to manage the pod. It is used to create, update, and delete the pod.
+- `Volume`: Volume is used to store the data. It is used to make the data persistent.
+- `StatefulSet`: StatefulSet is used to manage the stateful application.
+- `Secret`: Secret is used to store the sensitive information like password, token, etc.
+- `ConfigMap`: ConfigMap is used to store the configuration information.
 
 
 # Docker
@@ -19,13 +33,20 @@
 docker build -t <IMAGE_NAME>:<TAG> .
 ```
 - `docker run` : Runs a Docker container from an image.
-    - use `-d` to run the container in the background.
-    - user `-v` to mount the volume, make data persistent.
+    - detach mode with port mapping: `-d -p <EXTERNAL_PORT>:<INTERNAL_PORT>`
 ```
 docker run -d -p <EXTERNAL_PORT>:<INTERNAL_PORT> \
     -e <ENV_NAME>=<VALUE> -v <HOST_DIR>:<CONTAINER_DIR> \
     --name <CONTAINER_NAME> <IMAGE_NAME>:<TAG>
 ```
+    - iterative mode: `-it` for troubleshooting
+```
+docker run -it -p <EXTERNAL_PORT>:<INTERNAL_PORT> \
+    -e <ENV_NAME>=<VALUE> -v <HOST_DIR>:<CONTAINER_DIR> \
+    --name <CONTAINER_NAME> <IMAGE>
+```
+    - user `-v` to mount the volume, make data persistent.
+
 ### Other Commands
 - `docker ps` : Lists running containers.
 - `docker images` : Lists all Docker images on the host.
