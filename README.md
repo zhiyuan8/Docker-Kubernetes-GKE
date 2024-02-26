@@ -72,8 +72,9 @@ kubectl : command line tool to interact with k8s cluster
 ### Essential Commands
 - `docker build` : Builds Docker images from a Dockerfile and a context.
 ```
-docker build -t <IMAGE_NAME>:<TAG> .
+docker build -f <DOCKER_FILE> -t <IMAGE_NAME>:<TAG> .
 ```
+If you want to build for dev environment, use `Dockerfile.dev` instead of `Dockerfile`.
 - `docker run` : Runs a Docker container from an image.
     - detach mode with port mapping: `-d -p <EXTERNAL_PORT>:<INTERNAL_PORT>`
 ```
@@ -117,6 +118,10 @@ ENV <ENV_NAME>=<VALUE>
 COPY <SOURCE> <DESTINATION>
 CMD <COMMAND>
 ```
+
+**Dev dockerfile**
+for React, distingish between development and production environment. Generate `Dockerfile.dev` for development environment.
+
 
 ## docker compose
 for running multiple containers
