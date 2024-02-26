@@ -5,7 +5,9 @@ Open-source container orchestration platform, help to mange cotainers at scale.
     - high availability or no downtime
     - scalability or high performance
     - disaster recovery
-- trend from monolithic to microservices architecture.
+- trend from `monolithic` to `microservices` architecture.
+    - `monolithic` : all the services are in one application
+    - `microservices` : each service is in one application, and communicate with each other.
 
 ## K8s Components
 ### contrainer abtraction
@@ -42,34 +44,37 @@ Open-source container orchestration platform, help to mange cotainers at scale.
     - host DB outside of the k8s cluster because it is diffucult to manage the stateful application in k8s cluster.
 
 ## K8s Architecture
-3 process : 1. Kube proxy, 2. Kubelet, 3. Kube API server
-usually 2 master nodes for high availability, and 3 worker nodes for high performance.
+Usually 2 master nodes for high availability, and 3 worker nodes for high performance.
 
-master process :
-client request -> Kube API server ->  Kube scheduler -> Kube controller manager -> etcd (key-value store), cluster brain
+### Master Nodes
+Components:
+- `Kube API Server`: Acts as the front-end for the Kubernetes control plane. It is the primary management point of the entire cluster, handling user requests, and operations within the cluster.
+- `Kube Scheduler`: Watches for newly created Pods with no assigned node, and selects a node for them to run on based on resource availability, constraints, and other policies.
+- `Kube Controller Manager`: Runs controller processes. It watches the state of the cluster through the API server and makes changes attempting to move the current state towards the desired state.
+- `etcd`: A consistent and highly-available key-value store used as Kubernetes' backing store for all cluster data. It represents the state of the cluster at any given point in time.
 
-worker process :
+### Worker Nodes
+Components:
+- `Kubelet`: An agent that runs on each worker node in the cluster. It makes sure that containers are running in a Pod.
+- `Kube-proxy`: Maintains network rules on nodes. These network rules allow network communication to your Pods from network sessions inside or outside of your cluster.
+- `Container Runtime`: The software that is responsible for running containers. Kubernetes supports several container runtimes, such as Docker, containerd, and CRI-O.
 
-Add new master / node server
-1. get new bare server
-2. install all the master / worker node processes
-3. join the new server to the cluster
-
-## minikube and kubectl
-test / local cluster setup : master and worker node run in one machine
-
-kubectl : command line tool to interact with k8s cluster
+### Adding New Masters or Worker Nodes
+1. Obtain a new bare-metal server or virtual machine.
+2. Install the necessary components for a master or worker node. This includes installing a container runtime, kubelet, kube-proxy, and for master nodes, the Control Plane components.
+3. Join the new server to the cluster using the Kubernetes join command, which requires a token and the address of the Control Plane's API server.
 
 # Docker
-- docker image : This is the basic unit in the docker. It is a snapshot of the file system.
-- docker container : This is the running instance of the docker image.
-- Docker vs VM
-    - Containerization vs. Virtualization: Docker containers run on the host OS sharing the same kernel, making them lightweight. In contrast, VMs include full copies of an OS, a hypervisor, and the application, making them heavier.
-    - Performance: Docker's approach ensures applications use fewer resources than VMs, offering faster start-up times and better performance.
-    - Isolation Level: Docker provides application-level isolation, whereas VMs provide OS-level isolation.
+For `docker compose` and `docker network` and `docker swarm`, see [readme](docker/README.md)
 
-## ocker Commands
-### Essential Commands
+- Docker image: A snapshot of the filesystem, serving as Docker's basic unit.
+- Docker container: A running instance of a Docker image.
+- Docker vs VM:
+    - Docker containers **share the host OS kernel**, making them lightweight and fast. VMs contain full OS copies, are heavier, and have slower startup times.
+    - Docker offers **application-level isolation**; VMs provide **OS-level isolation**, enhancing security but at a resource cost.
+
+## Docker Commands
+### Essential
 - `docker build` : Builds Docker images from a Dockerfile and a context.
 ```
 docker build -f <DOCKER_FILE> -t <IMAGE_NAME>:<TAG> .
@@ -77,20 +82,20 @@ docker build -f <DOCKER_FILE> -t <IMAGE_NAME>:<TAG> .
 If you want to build for dev environment, use `Dockerfile.dev` instead of `Dockerfile`.
 - `docker run` : Runs a Docker container from an image.
     - detach mode with port mapping: `-d -p <EXTERNAL_PORT>:<INTERNAL_PORT>`
+    - iterative mode: `-it` for troubleshooting
+    - user `-v` to mount the volume, make data persistent.
 ```
+# detached
 docker run -d -p <EXTERNAL_PORT>:<INTERNAL_PORT> \
     -e <ENV_NAME>=<VALUE> -v <HOST_DIR>:<CONTAINER_DIR> \
     --name <CONTAINER_NAME> <IMAGE_NAME>:<TAG>
-```
-    - iterative mode: `-it` for troubleshooting
-```
+# iterative
 docker run -it -p <EXTERNAL_PORT>:<INTERNAL_PORT> \
     -e <ENV_NAME>=<VALUE> -v <HOST_DIR>:<CONTAINER_DIR> \
     --name <CONTAINER_NAME> <IMAGE>
 ```
-    - user `-v` to mount the volume, make data persistent.
 
-### Other Commands
+### Others
 - `docker ps` : Lists running containers.
 - `docker images` : Lists all Docker images on the host.
 - `docker exec` : Executes a command inside a running container.
@@ -110,7 +115,7 @@ docker start <CONTAINER_NAME_OR_ID>
 docker stop <CONTAINER_NAME_OR_ID>
 ```
 
-## DOCKERFILE
+## DOCKERFILE format
 ```
 FROM <BASE_IMAGE>
 WORKDIR <WORKING_DIRECTORY>
@@ -121,18 +126,6 @@ CMD <COMMAND>
 
 **Dev dockerfile**
 for React, distingish between development and production environment. Generate `Dockerfile.dev` for development environment.
-
-
-## docker compose
-for running multiple containers
-
-
-## docker network
-
-
-## docker swarm
-
-
 
 # References
 - [Docker Kubernetes Udemy Course](https://www.udemy.com/course/docker-and-kubernetes-the-complete-guide/)
