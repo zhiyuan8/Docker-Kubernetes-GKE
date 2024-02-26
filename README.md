@@ -64,6 +64,9 @@ Components:
 2. Install the necessary components for a master or worker node. This includes installing a container runtime, kubelet, kube-proxy, and for master nodes, the Control Plane components.
 3. Join the new server to the cluster using the Kubernetes join command, which requires a token and the address of the Control Plane's API server.
 
+# GKE
+TODO, will focus on GPU auto-scaling on Google Kubernetes Engine (GKE).
+
 # Docker
 For `docker compose` and `docker network` and `docker swarm`, see [readme](docker/README.md)
 
