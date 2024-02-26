@@ -1,9 +1,25 @@
-version : '3'
-services:
-  redis-server:
-    image: 'redis'
-  node-app:
-    restart: always
-    build: .
+version: '3.8' # Specifies the version of the Docker Compose file format
+
+services: # Defines the services that make up your application
+
+  selenium-chrome:
+    image: selenium/standalone-chrome:latest # The Docker image to use for the Selenium Chrome service
+    volumes:
+      - /dev/shm:/dev/shm # Maps shared memory to avoid common Selenium container issue
     ports:
-      - "8081:8081"
+      - "4444:4444" # Exposes port 4444 on the host and maps it to port 4444 in the container, used by Selenium Grid
+
+  app:
+    build: . # Tells Docker Compose to build the Docker image for your application using the Dockerfile in the current directory
+    ports:
+      - "8000:8000" # Exposes port 8000 on the host and maps it to port 8000 in the container, used by your FastAPI app
+    depends_on:
+      - selenium-chrome # Ensures that the selenium-chrome service is started before your application
+    environment:
+      SELENIUM_URL: http://selenium-chrome:4444/wd/hub # Sets an environment variable in your app container to specify the URL of the Selenium server
+
+# Notes:
+# - The `volumes` mapping for /dev/shm is crucial for performance and to prevent Selenium from crashing due to lack of shared memory.
+# - The `SELENIUM_URL` environment variable is used by your application to connect to the Selenium server. Make sure your application code is configured to use this variable to initiate the Selenium WebDriver.
+# - Adjust the `ports` and other configurations as needed based on your specific requirements and environment setup.
+# - This setup assumes that your application and the Selenium server are the only services needed. If your application requires additional services (like a database), you would add them in a similar manner to how the selenium-chrome and app services are defined.
