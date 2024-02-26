@@ -9,11 +9,15 @@ docker-compose --version
 Note, the docker-compose file must in name `docker-compose.yml` or `docker-compose.yaml` in the root directory of the project.
 Below commands are used to start the docker container, same as `docker run` command.
 ```
-docker-compose up
+docker-compose up -d
 ```
 Below command is used to build and start the docker container, same as `docker build` and `docker run` command.
 ```
-docker-compose --build
+docker-compose --build -d
+```
+follow logs in realtime
+```
+docker-compose logs -f
 ```
 stop the container
 ```
